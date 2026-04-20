@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ILLIA SYSTEM V4</title>
+    <style>
+        body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .card { background: #000; border: 2px solid #1a1a1a; padding: 40px; border-radius: 20px; text-align: center; width: 350px; box-shadow: 0 0 30px rgba(0, 132, 255, 0.1); }
+        h1 { color: #0084ff; font-size: 24px; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; }
+        .btn { background: #0084ff; border: none; color: #fff; padding: 18px; width: 100%; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.2s; }
+        .btn:disabled { background: #222; color: #555; cursor: not-allowed; }
+        #status { margin-top: 25px; font-size: 20px; font-weight: 900; color: #00ff99; display: none; text-transform: uppercase; line-height: 1.4; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>ILLIA SYSTEM V4</h1>
+    <button class="btn" id="genBtn">СГЕНЕРИРОВАТЬ КЛЮЧ</button>
+    <div id="status">КЛЮЧ АВТОМАТИЧЕСКИ<br>КОПИРУЕТСЯ...</div>
+</div>
+
+<script type="module">
+  // Подключаем Firebase через CDN (модульный метод)
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getFirestore, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  // Твой конфиг, который ты скинул
+  const firebaseConfig = {
+    apiKey: "AIzaSyCYil0_Ck8ZOBEHJ61nt0K4FKeypYi8Y6M",
+    authDomain: "kay-system.firebaseapp.com",
+    projectId: "kay-system",
+    storageBucket: "kay-system.firebasestorage.app",
+    messagingSenderId: "869091363054",
+    appId: "1:869091363054:web:6a64d386674bf9488ecbff",
+    measurementId: "G-PNHE4X565V"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  document.getElementById('genBtn').onclick = async () => {
+    const btn = document.getElementById('genBtn');
+    const status = document.getElementById('status');
+
+    btn.disabled = true;
+    btn.innerText = "ГЕНЕРАЦИЯ...";
+
+    try {
+      // 1. Получаем IP пользователя
+      const ipRes = await fetch('https://api.ipify.org?format=json');
+      const { ip } = await ipRes.json();
+
+      // 2. Проверяем, не брал ли этот IP ключ сегодня
+      const today = new Date().toISOString().split('T')[0];
+      const q = query(collection(db, "keys"), where("ip", "==", ip), where("date", "==", today));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        status.innerText = "ЛИМИТ: 1 КЛЮЧ В ДЕНЬ";
+        status.style.color = "#ff4444";
+        status.style.display = "block";
+        btn.innerText = "ОТКАЗАНО";
+        return;
+      }
+
+      // 3. Создаем ключ
+      const newKey = "beta_" + Math.random().toString(36).substring(2, 8).toUpperCase();
+
+      // 4. Сохраняем в Firestore
+      await addDoc(collection(db, "keys"), {
+        key: newKey,
+        ip: ip,
+        date: today,
+        timestamp: new Date()
+      });
+
+      // 5. Копируем в буфер обмена
+      await navigator.clipboard.writeText(newKey);
+
+      // 6. Показываем статус и открываем твою ссылку
+      status.style.display = "block";
+      btn.innerText = "ГОТОВО";
+      
+      window.open("https://gplinks.co/RBEk9S", "_blank");
+
+      // 7. Пробуем закрыть окно через 1.5 секунды
+      setTimeout(() => {
+          window.close();
+          document.body.innerHTML = "<h1 style='color:#00ff99; text-align:center; padding-top:40vh;'>КЛЮЧ СКОПИРОВАН!<br>МОЖНО ЗАКРЫТЬ.</h1>";
+      }, 1500);
+
+    } catch (e) {
+      console.error(e);
+      alert("Ошибка базы данных. Проверь правила (Rules) в Firebase!");
+      btn.disabled = false;
+      btn.innerText = "СГЕНЕРИРОВАТЬ КЛЮЧ";
+    }
+  };
+</script>
+
+</body>
+</html>
