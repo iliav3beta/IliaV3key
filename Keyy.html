@@ -1,104 +1,156 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ILLIA SYSTEM V4</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mini Mario HTML5</title>
     <style>
-        body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .card { background: #000; border: 2px solid #1a1a1a; padding: 40px; border-radius: 20px; text-align: center; width: 350px; box-shadow: 0 0 30px rgba(0, 132, 255, 0.1); }
-        h1 { color: #0084ff; font-size: 24px; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; }
-        .btn { background: #0084ff; border: none; color: #fff; padding: 18px; width: 100%; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.2s; }
-        .btn:disabled { background: #222; color: #555; cursor: not-allowed; }
-        #status { margin-top: 25px; font-size: 20px; font-weight: 900; color: #00ff99; display: none; text-transform: uppercase; line-height: 1.4; }
+        body { margin: 0; background: #333; overflow: hidden; font-family: Arial; }
+        canvas { display: block; background: #5c94fc; margin: 0 auto; border-bottom: 2px solid #000; }
+        
+        /* Стилі для сенсорного керування */
+        .controls {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 150px;
+            background: #222;
+            padding: 10px;
+        }
+        .btn {
+            width: 70px;
+            height: 70px;
+            background: #666;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        .btn:active { background: #999; }
+        .jump-btn { background: #e74c3c; width: 90px; height: 90px; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h1>ILLIA SYSTEM V4</h1>
-    <button class="btn" id="genBtn">СГЕНЕРИРОВАТЬ КЛЮЧ</button>
-    <div id="status">КЛЮЧ АВТОМАТИЧЕСКИ<br>КОПИРУЕТСЯ...</div>
+<canvas id="gameCanvas"></canvas>
+
+<div class="controls">
+    <div class="btn" id="leftBtn">←</div>
+    <div class="btn" id="rightBtn">→</div>
+    <div class="btn jump-btn" id="jumpBtn">ВГОРУ</div>
 </div>
 
-<script type="module">
-  // Подключаем Firebase через CDN (модульный метод)
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
 
-  // Твой конфиг, который ты скинул
-  const firebaseConfig = {
-    apiKey: "AIzaSyCYil0_Ck8ZOBEHJ61nt0K4FKeypYi8Y6M",
-    authDomain: "kay-system.firebaseapp.com",
-    projectId: "kay-system",
-    storageBucket: "kay-system.firebasestorage.app",
-    messagingSenderId: "869091363054",
-    appId: "1:869091363054:web:6a64d386674bf9488ecbff",
-    measurementId: "G-PNHE4X565V"
-  };
+// Адаптація розміру під екран
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight - 150;
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+const player = {
+    x: 50,
+    y: 200,
+    width: 30,
+    height: 30,
+    color: 'red',
+    speed: 5,
+    dx: 0,
+    dy: 0,
+    jumpForce: 12,
+    gravity: 0.6,
+    grounded: false
+};
 
-  document.getElementById('genBtn').onclick = async () => {
-    const btn = document.getElementById('genBtn');
-    const status = document.getElementById('status');
+const platforms = [
+    { x: 0, y: canvas.height - 40, width: 2000, height: 40 }, // Земля
+    { x: 150, y: canvas.height - 120, width: 100, height: 20 },
+    { x: 300, y: canvas.height - 200, width: 100, height: 20 },
+    { x: 500, y: canvas.height - 150, width: 150, height: 20 }
+];
 
-    btn.disabled = true;
-    btn.innerText = "ГЕНЕРАЦИЯ...";
+// Стан кнопок
+const keys = { left: false, right: false, up: false };
 
-    try {
-      // 1. Получаем IP пользователя
-      const ipRes = await fetch('https://api.ipify.org?format=json');
-      const { ip } = await ipRes.json();
+// Обробка сенсорних кнопок
+function setupBtn(id, key) {
+    const btn = document.getElementById(id);
+    btn.addEventListener('touchstart', (e) => { e.preventDefault(); keys[key] = true; });
+    btn.addEventListener('touchend', (e) => { e.preventDefault(); keys[key] = false; });
+}
 
-      // 2. Проверяем, не брал ли этот IP ключ сегодня
-      const today = new Date().toISOString().split('T')[0];
-      const q = query(collection(db, "keys"), where("ip", "==", ip), where("date", "==", today));
-      const querySnapshot = await getDocs(q);
+setupBtn('leftBtn', 'left');
+setupBtn('rightBtn', 'right');
+setupBtn('jumpBtn', 'up');
 
-      if (!querySnapshot.empty) {
-        status.innerText = "ЛИМИТ: 1 КЛЮЧ В ДЕНЬ";
-        status.style.color = "#ff4444";
-        status.style.display = "block";
-        btn.innerText = "ОТКАЗАНО";
-        return;
-      }
+function update() {
+    // Рух по горизонталі
+    if (keys.left) player.dx = -player.speed;
+    else if (keys.right) player.dx = player.speed;
+    else player.dx = 0;
 
-      // 3. Создаем ключ
-      const newKey = "beta_" + Math.random().toString(36).substring(2, 8).toUpperCase();
-
-      // 4. Сохраняем в Firestore
-      await addDoc(collection(db, "keys"), {
-        key: newKey,
-        ip: ip,
-        date: today,
-        timestamp: new Date()
-      });
-
-      // 5. Копируем в буфер обмена
-      await navigator.clipboard.writeText(newKey);
-
-      // 6. Показываем статус и открываем твою ссылку
-      status.style.display = "block";
-      btn.innerText = "ГОТОВО";
-      
-      window.open("https://gplinks.co/RBEk9S", "_blank");
-
-      // 7. Пробуем закрыть окно через 1.5 секунды
-      setTimeout(() => {
-          window.close();
-          document.body.innerHTML = "<h1 style='color:#00ff99; text-align:center; padding-top:40vh;'>КЛЮЧ СКОПИРОВАН!<br>МОЖНО ЗАКРЫТЬ.</h1>";
-      }, 1500);
-
-    } catch (e) {
-      console.error(e);
-      alert("Ошибка базы данных. Проверь правила (Rules) в Firebase!");
-      btn.disabled = false;
-      btn.innerText = "СГЕНЕРИРОВАТЬ КЛЮЧ";
+    // Стрибок
+    if (keys.up && player.grounded) {
+        player.dy = -player.jumpForce;
+        player.grounded = false;
     }
-  };
-</script>
 
+    // Гравітація
+    player.dy += player.gravity;
+    player.x += player.dx;
+    player.y += player.dy;
+
+    // Колізія з платформами
+    player.grounded = false;
+    platforms.forEach(rect => {
+        if (player.x < rect.x + rect.width &&
+            player.x + player.width > rect.x &&
+            player.y < rect.y + rect.height &&
+            player.y + player.height > rect.y) {
+            
+            // Якщо падаємо на платформу зверху
+            if (player.dy > 0 && player.y + player.height - player.dy <= rect.y) {
+                player.y = rect.y - player.height;
+                player.dy = 0;
+                player.grounded = true;
+            }
+        }
+    });
+
+    // Межі екрана
+    if (player.x < 0) player.x = 0;
+    if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+}
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Малюємо платформу
+    ctx.fillStyle = '#8b4513';
+    platforms.forEach(rect => {
+        ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
+    });
+
+    // Малюємо гравця (Маріо)
+    ctx.fillStyle = player.color;
+    ctx.fillRect(player.x, player.y, player.width, player.height);
+    
+    // Очі "Маріо" для напрямку
+    ctx.fillStyle = 'white';
+    let eyeOffset = keys.left ? 5 : 20;
+    ctx.fillRect(player.x + eyeOffset, player.y + 5, 5, 5);
+
+    requestAnimationFrame(() => {
+        update();
+        draw();
+    });
+}
+
+draw();
+</script>
 </body>
 </html>
