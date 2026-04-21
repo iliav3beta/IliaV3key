@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -15,7 +15,7 @@
         }
 
         html { scroll-behavior: smooth; }
-        * { box-sizing: border-box; transition: all 0.3s ease; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); -webkit-tap-highlight-color: transparent; }
 
         body {
             margin: 0;
@@ -26,7 +26,7 @@
             width: 100%;
         }
 
-        /* Фон с сеткой */
+        /* Фон */
         body::before {
             content: "";
             position: fixed;
@@ -47,7 +47,7 @@
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(20px);
             background: rgba(3, 3, 5, 0.8);
             border-bottom: 1px solid rgba(0, 242, 255, 0.2);
         }
@@ -58,12 +58,13 @@
 
         /* Бургер-иконка */
         .burger {
-            width: 30px;
-            height: 20px;
+            width: 24px;
+            height: 18px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             cursor: pointer;
+            padding: 2px;
         }
         .burger span {
             display: block;
@@ -71,47 +72,48 @@
             height: 2px;
             background: var(--accent);
             border-radius: 2px;
-            box-shadow: 0 0 5px var(--accent);
+            box-shadow: 0 0 8px var(--accent-glow);
         }
 
         /* Боковое меню */
         .side-menu {
             position: fixed;
             top: 0; right: -100%;
-            width: 280px;
+            width: 260px;
             height: 100vh;
             background: rgba(5, 5, 10, 0.98);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(25px);
             z-index: 2000;
             padding: 80px 30px;
             border-left: 1px solid var(--accent);
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            gap: 20px;
         }
         .side-menu.active { right: 0; }
         .side-menu a {
             color: white;
             text-decoration: none;
             font-family: 'Orbitron';
-            font-size: 18px;
+            font-size: 16px;
             letter-spacing: 2px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .side-menu a:hover { color: var(--accent); }
-        .close-menu { position: absolute; top: 25px; right: 25px; font-size: 30px; cursor: pointer; color: var(--accent); }
+        .close-menu { position: absolute; top: 20px; right: 20px; font-size: 32px; cursor: pointer; color: var(--accent); }
 
-        .lang-switch { display: flex; gap: 5px; }
+        .lang-switch { display: flex; gap: 4px; }
         .lang-btn {
-            padding: 5px 8px;
+            padding: 4px 8px;
             cursor: pointer;
             font-family: 'Orbitron';
             font-size: 10px;
             border: 1px solid rgba(0, 242, 255, 0.2);
             background: transparent;
-            color: #888;
-            border-radius: 4px;
+            color: #666;
+            border-radius: 3px;
         }
-        .lang-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
+        .lang-btn.active { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
 
         /* Hero */
         .hero {
@@ -126,10 +128,10 @@
 
         h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(2rem, 12vw, 5rem);
+            font-size: clamp(2.2rem, 10vw, 5.5rem);
             margin: 0;
-            letter-spacing: 10px;
-            text-shadow: 0 0 20px var(--accent-glow);
+            letter-spacing: 8px;
+            text-shadow: 0 0 25px var(--accent-glow);
         }
 
         /* Контейнер */
@@ -144,20 +146,22 @@
         .card {
             background: var(--card-bg);
             padding: 30px;
-            border-left: 3px solid var(--accent);
-            border-radius: 8px;
+            border-left: 2px solid var(--accent);
+            border-radius: 12px;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
-        .card:active { transform: scale(0.98); }
+        /* Эффект нажатия (тактильный отклик) */
+        .card:active { transform: scale(0.97); background: rgba(25, 25, 35, 1); }
 
-        .card h3 { font-family: 'Orbitron'; color: var(--accent); margin-top: 0; }
-        .card p { font-size: 1rem; color: #bbb; line-height: 1.5; pointer-events: none; }
+        .card h3 { font-family: 'Orbitron'; color: var(--accent); margin-top: 0; font-size: 1.2rem; }
+        .card p { font-size: 0.95rem; color: #aaa; line-height: 1.6; pointer-events: none; }
 
         /* Кнопка */
         .btn-main {
-            margin-top: 30px;
-            padding: 15px 40px;
+            margin-top: 35px;
+            padding: 16px 45px;
             background: transparent;
             border: 2px solid var(--accent);
             color: var(--accent);
@@ -166,20 +170,27 @@
             font-weight: bold;
             display: inline-block;
             text-transform: uppercase;
+            border-radius: 5px;
+            letter-spacing: 2px;
         }
-        .btn-main:active { transform: scale(0.95); }
+        .btn-main:active { transform: scale(0.94); background: var(--accent); color: #000; }
 
         .code-container {
-            margin-top: 40px;
+            margin-top: 50px;
             padding: 25px;
-            background: #000;
-            border: 1px solid rgba(0, 242, 255, 0.3);
-            border-radius: 8px;
+            background: rgba(0,0,0,0.8);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 10px;
         }
 
-        code { color: #00ff88; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; word-break: break-all; display: block; }
+        code { color: #00ff88; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; word-break: break-all; display: block; opacity: 0.8; }
 
-        footer { text-align: center; padding: 40px; color: #444; font-size: 10px; font-family: 'Orbitron'; }
+        footer { text-align: center; padding: 50px; color: #333; font-size: 10px; font-family: 'Orbitron'; }
+
+        @media (max-width: 600px) {
+            h1 { letter-spacing: 4px; }
+            .container { padding: 40px 15px; }
+        }
     </style>
 </head>
 <body>
@@ -188,8 +199,8 @@
     <div class="close-menu" onclick="toggleMenu()">×</div>
     <a href="#" onclick="toggleMenu()">HOME</a>
     <a href="#scripts" onclick="toggleMenu()">FEATURES</a>
-    <a href="#scripts" onclick="toggleMenu()">GET SCRIPT</a>
-    <a href="https://discord.gg/yourlink" target="_blank">DISCORD</a>
+    <a href="https://discord.gg/yourlink" target="_blank" onclick="vibrate(15)">DISCORD</a>
+    <a href="https://youtube.com/" target="_blank" onclick="vibrate(15)">YOUTUBE</a>
 </div>
 
 <nav>
@@ -210,21 +221,21 @@
 
 <div class="hero">
     <h1>ILIAV3DEMO</h1>
-    <p style="color: var(--accent); font-family: 'JetBrains Mono'; margin: 15px 0;">[ STATUS: ACTIVE ]</p>
-    <a href="#scripts" class="btn-main" id="btn-get" onclick="vibrate()">ВСТАНОВИТИ</a>
+    <p style="color: var(--accent); font-family: 'JetBrains Mono'; font-size: 13px; margin: 15px 0;">[ STATUS: OPERATIONAL ]</p>
+    <a href="#scripts" class="btn-main" id="btn-get" onclick="vibrate(20)">ВСТАНОВИТИ</a>
 </div>
 
 <div class="container" id="scripts">
     <div class="grid">
-        <div class="card" onclick="vibrate()">
+        <div class="card" onclick="vibrate(12)">
             <h3 id="f1-t">Silent Aim</h3>
             <p id="f1-d">Інтелектуальна система наведення. Кулі влучають у ціль без різких рухів камери. Максимальна стабільність.</p>
         </div>
-        <div class="card" onclick="vibrate()">
+        <div class="card" onclick="vibrate(12)">
             <h3 id="f2-t">ESP Vision</h3>
             <p id="f2-d">Повний візуальний контроль. Відображення ворогів крізь стіни: бокси, скелети та точна дистанція.</p>
         </div>
-        <div class="card" onclick="vibrate()">
+        <div class="card" onclick="vibrate(12)">
             <h3 id="f3-t">Security Bypass</h3>
             <p id="f3-d">Обхід анти-чіта Rivals останнього покоління. Безпечне використання Demo версії.</p>
         </div>
@@ -235,19 +246,19 @@
     </div>
 </div>
 
-<footer>&copy; 2026 ILIAV3 CORE // RIVALS PROJECT</footer>
+<footer>&copy; 2026 ILIAV3 CORE // HIGH-END PERFORMANCE</footer>
 
 <script>
-    // Функция вибрации
-    function vibrate() {
+    // Премиальная легкая вибрация
+    function vibrate(ms) {
         if (navigator.vibrate) {
-            navigator.vibrate(40); // 40мс легкой вибрации
+            navigator.vibrate(ms); // Используем 10-20мс для эффекта Taptic Engine
         }
     }
 
-    // Меню
+    // Логика меню
     function toggleMenu() {
-        vibrate();
+        vibrate(15);
         document.getElementById('sideMenu').classList.toggle('active');
     }
 
@@ -258,7 +269,7 @@
     };
 
     function setLang(lang, btn) {
-        vibrate();
+        vibrate(10);
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         const t = translations[lang];
