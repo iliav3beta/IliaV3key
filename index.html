@@ -3,179 +3,233 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IliaV3Demo | Rivals Script</title>
+    <title>ILIAV3DEMO | RIVALS NEXT-GEN</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap');
+
         :root {
-            --primary: #00ff88;
-            --bg: #0f0f0f;
-            --card: #1a1a1a;
-            --text: #ffffff;
+            --accent: #00f2ff;
+            --accent-glow: rgba(0, 242, 255, 0.5);
+            --bg: #050505;
+            --card-bg: rgba(20, 20, 20, 0.8);
         }
 
         body {
             margin: 0;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
+            padding: 0;
+            background: var(--bg);
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
+        /* Анімований фон */
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-        }
-
-        header {
-            padding: 60px 0;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://img.freepik.com/free-vector/abstract-digital-grid-background-with-line-shapes_1017-25362.jpg');
-            background-size: cover;
-            border-bottom: 3px solid var(--primary);
+            background: radial-gradient(circle, rgba(0,242,255,0.05) 0%, transparent 70%);
         }
 
         h1 {
-            font-size: 3rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(3rem, 10vw, 6rem);
             margin: 0;
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            background: linear-gradient(180deg, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px var(--accent-glow));
+            letter-spacing: 10px;
         }
 
-        .status {
-            display: inline-block;
-            padding: 5px 15px;
-            background: rgba(0, 255, 136, 0.2);
-            border: 1px solid var(--primary);
-            border-radius: 20px;
-            color: var(--primary);
-            font-weight: bold;
+        .tagline {
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            color: #aaa;
             margin-top: 10px;
+            text-transform: uppercase;
         }
 
-        .description {
-            font-size: 1.2rem;
-            color: #ccc;
-            margin: 30px 0;
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 50px 20px;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
         }
 
         .card {
-            background: var(--card);
-            padding: 25px;
-            border-radius: 15px;
-            border: 1px solid #333;
-            transition: 0.3s;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 2px; /* Гострі кути для стилю мілітарі/кіберпанк */
+            border-left: 4px solid var(--accent);
+            backdrop-filter: blur(10px);
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
         }
 
         .card:hover {
-            border-color: var(--primary);
-            transform: translateY(-5px);
+            background: rgba(30, 30, 30, 0.9);
+            transform: scale(1.02);
+            box-shadow: 0 0 40px rgba(0, 242, 255, 0.1);
         }
 
         .card h3 {
-            color: var(--primary);
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent);
+            font-size: 1.8rem;
             margin-top: 0;
         }
 
-        .btn {
-            display: inline-block;
-            padding: 15px 40px;
-            background: var(--primary);
-            color: black;
-            text-decoration: none;
-            font-weight: bold;
-            border-radius: 50px;
+        .card p {
             font-size: 1.2rem;
-            margin-top: 40px;
-            transition: 0.3s;
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+            color: #ccc;
         }
 
-        .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(0, 255, 136, 0.6);
+        .code-section {
+            margin-top: 100px;
+            background: #000;
+            padding: 40px;
+            border: 1px solid #222;
+            position: relative;
         }
 
-        footer {
-            margin-top: 60px;
-            padding: 20px;
-            color: #555;
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            color: var(--accent);
+            font-family: 'Orbitron', sans-serif;
             font-size: 0.9rem;
         }
 
-        .code-box {
-            background: #000;
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px dashed var(--primary);
+        code {
+            display: block;
+            color: #00ff88;
             font-family: monospace;
-            color: var(--primary);
-            margin: 20px 0;
-            overflow-x: auto;
+            word-break: break-all;
+            background: #0a0a0a;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .btn-launch {
+            margin-top: 50px;
+            padding: 20px 60px;
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-launch:hover {
+            background: var(--accent);
+            color: #000;
+            box-shadow: 0 0 50px var(--accent);
+        }
+
+        footer {
+            text-align: center;
+            padding: 50px;
+            color: #444;
+            letter-spacing: 2px;
         }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="container">
-        <h1>ILIAV3DEMO</h1>
-        <div class="status">● UNDETECTED</div>
-        <p class="description">Найкращий безкоштовний скрипт для Rivals у Roblox. Домінуй над ворогами з легкістю.</p>
-    </div>
-</header>
+<canvas id="dots"></canvas>
+
+<div class="hero">
+    <h1>ILIAV3DEMO</h1>
+    <div class="tagline">The Ultimate Rivals Experience</div>
+    <a href="#get-script" class="btn-launch">GET STARTED</a>
+</div>
 
 <div class="container">
-    <h2>Переваги скрипта</h2>
-    
     <div class="grid">
         <div class="card">
             <h3>Silent Aim</h3>
-            <p>Всі твої кулі летять точно в ціль, навіть якщо ти не ідеально цілишся. Максимальна точність без "тряски" екрана.</p>
+            <p>Удосконалений алгоритм наведення. Кулі влучають точно в ціль без різких рухів камери. Виглядає максимально легітно для інших гравців.</p>
         </div>
         <div class="card">
-            <h3>ESP / Wallhack</h3>
-            <p>Бач ворогів крізь стіни. Тобі завжди відомо їхнє здоров'я, дистанція та зброя.</p>
+            <h3>Anti-Ban Bypass</h3>
+            <p>Вбудований модуль обходу серверних перевірок Rivals. Грай спокійно — твій акаунт захищений новітніми методами ін'єкції.</p>
         </div>
         <div class="card">
-            <h3>No Recoil</h3>
-            <p>Повністю прибирає віддачу у зброї. Стріляй затиском в одну точку як професіонал.</p>
-        </div>
-        <div class="card">
-            <h3>Auto Farm</h3>
-            <p>Швидке прокачування рівнів та збирання валюти в автоматичному режимі.</p>
-        </div>
-        <div class="card">
-            <h3>Anti-Ban</h3>
-            <p>Скрипт має вбудований захист від анти-чіта Rivals, що робить використання безпечним.</p>
-        </div>
-        <div class="card">
-            <h3>Легкий запуск</h3>
-            <p>Працює на більшості популярних інжекторах (Solara, Wave, Fluxus тощо).</p>
+            <h3>Optimized Performance</h3>
+            <p>Мінімальний вплив на FPS. Скрипт працює плавно навіть на слабких ПК, не перевантажуючи процесор вашого пристрою.</p>
         </div>
     </div>
 
-    <h2 style="margin-top: 50px;">Як використовувати?</h2>
-    <p>Скопіюй скрипт та встав його у свій виконавець (executor):</p>
-    
-    <div class="code-box">
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/iliav3beta/IliaV3key/main/script.lua"))()
+    <div class="code-section" id="get-script">
+        <div class="code-header">
+            <span>EXECUTOR SCRIPT</span>
+            <span>STATUS: ONLINE</span>
+        </div>
+        <code>
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/iliav3beta/IliaV3key/main/script.lua"))()
+        </code>
     </div>
-
-    <a href="#" class="btn">Завантажити Executor</a>
 
     <footer>
-        &copy; 2026 IliaV3 Scripts. Розроблено для спільноти Roblox.
+        DESIGNED BY ILIAV3 &copy; 2026 | ACCESS GRANTED
     </footer>
 </div>
+
+<script>
+    // Простий ефект фону з крапками
+    const canvas = document.getElementById('dots');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    for(let i = 0; i < 100; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 2,
+            speed: Math.random() * 0.5
+        });
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'rgba(0, 242, 255, 0.3)';
+        particles.forEach(p => {
+            p.y -= p.speed;
+            if(p.y < 0) p.y = canvas.height;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+        });
+        requestAnimationFrame(animate);
+    }
+    animate();
+</script>
 
 </body>
 </html>
