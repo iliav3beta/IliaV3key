@@ -3,34 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ILIAV3DEMO | RIVALS NEXT-GEN</title>
+    <title>ILIAV3DEMO | RIVALS PREVIEW</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@300;600&display=swap');
 
         :root {
             --accent: #00f2ff;
-            --accent-glow: rgba(0, 242, 255, 0.5);
+            --accent-glow: rgba(0, 242, 255, 0.6);
             --bg: #050505;
-            --card-bg: rgba(20, 20, 20, 0.8);
+            --glass: rgba(255, 255, 255, 0.03);
         }
+
+        * { box-sizing: border-box; transition: all 0.3s ease; }
 
         body {
             margin: 0;
-            padding: 0;
             background: var(--bg);
             color: white;
-            font-family: 'Rajdhani', sans-serif;
+            font-family: 'Exo 2', sans-serif;
             overflow-x: hidden;
         }
 
         /* Анімований фон */
-        canvas {
+        #bg-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -1;
+            top: 0; left: 0; z-index: -1;
+            filter: blur(1px);
         }
 
+        /* Шапка з перемикачем мов */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: flex-end;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+        }
+
+        .lang-switch {
+            display: flex;
+            gap: 10px;
+            background: var(--glass);
+            padding: 5px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .lang-btn {
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            border: none;
+            background: transparent;
+            color: #666;
+        }
+
+        .lang-btn.active {
+            background: var(--accent);
+            color: #000;
+            box-shadow: 0 0 15px var(--accent);
+        }
+
+        /* Hero секція */
         .hero {
             height: 100vh;
             display: flex;
@@ -38,197 +76,208 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            background: radial-gradient(circle, rgba(0,242,255,0.05) 0%, transparent 70%);
+            animation: fadeIn 1.5s ease-out;
         }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(3rem, 10vw, 6rem);
+            font-size: clamp(2.5rem, 8vw, 5.5rem);
             margin: 0;
-            background: linear-gradient(180deg, #fff, var(--accent));
+            letter-spacing: 15px;
+            background: linear-gradient(to bottom, #fff, var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 30px var(--accent-glow));
-            letter-spacing: 10px;
+            filter: drop-shadow(0 0 20px var(--accent-glow));
         }
 
-        .tagline {
-            font-size: 1.5rem;
-            letter-spacing: 3px;
-            color: #aaa;
-            margin-top: 10px;
-            text-transform: uppercase;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 50px 20px;
-        }
+        /* Картки функцій */
+        .container { max-width: 1200px; margin: 0 auto; padding: 100px 20px; }
 
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
-            margin-top: 50px;
         }
 
         .card {
-            background: var(--card-bg);
+            background: var(--glass);
             padding: 40px;
-            border-radius: 2px; /* Гострі кути для стилю мілітарі/кіберпанк */
-            border-left: 4px solid var(--accent);
-            backdrop-filter: blur(10px);
-            transition: 0.4s;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-top: 3px solid var(--accent);
+            backdrop-filter: blur(15px);
             position: relative;
             overflow: hidden;
         }
 
         .card:hover {
-            background: rgba(30, 30, 30, 0.9);
-            transform: scale(1.02);
-            box-shadow: 0 0 40px rgba(0, 242, 255, 0.1);
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 40px rgba(0,242,255,0.1);
         }
 
         .card h3 {
             font-family: 'Orbitron', sans-serif;
             color: var(--accent);
-            font-size: 1.8rem;
             margin-top: 0;
+            text-transform: uppercase;
         }
 
-        .card p {
-            font-size: 1.2rem;
-            color: #ccc;
-        }
-
-        .code-section {
-            margin-top: 100px;
+        /* Блок коду */
+        .code-box {
+            margin-top: 60px;
             background: #000;
-            padding: 40px;
-            border: 1px solid #222;
+            padding: 30px;
+            border-radius: 5px;
+            border-left: 5px solid var(--accent);
             position: relative;
         }
 
-        .code-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            color: var(--accent);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
+        .code-box::after {
+            content: "LUA EXECUTION";
+            position: absolute;
+            top: -12px; right: 20px;
+            background: var(--accent);
+            color: #000;
+            padding: 2px 10px;
+            font-size: 10px;
+            font-weight: bold;
         }
 
         code {
-            display: block;
             color: #00ff88;
-            font-family: monospace;
+            font-family: 'Courier New', monospace;
             word-break: break-all;
-            background: #0a0a0a;
-            padding: 20px;
-            border-radius: 5px;
         }
 
-        .btn-launch {
-            margin-top: 50px;
-            padding: 20px 60px;
-            background: transparent;
-            border: 2px solid var(--accent);
-            color: var(--accent);
+        .btn-main {
+            margin-top: 40px;
+            padding: 18px 50px;
+            background: var(--accent);
+            color: #000;
             font-family: 'Orbitron', sans-serif;
             font-weight: bold;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: 0.3s;
             text-decoration: none;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
             display: inline-block;
         }
 
-        .btn-launch:hover {
-            background: var(--accent);
-            color: #000;
-            box-shadow: 0 0 50px var(--accent);
-        }
-
-        footer {
-            text-align: center;
-            padding: 50px;
-            color: #444;
-            letter-spacing: 2px;
-        }
+        .btn-main:hover { transform: scale(1.1); filter: brightness(1.2); }
     </style>
 </head>
 <body>
 
-<canvas id="dots"></canvas>
+<canvas id="bg-canvas"></canvas>
+
+<nav>
+    <div class="lang-switch">
+        <button class="lang-btn active" onclick="setLang('ua')">UA</button>
+        <button class="lang-btn" onclick="setLang('ru')">RU</button>
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+</nav>
 
 <div class="hero">
-    <h1>ILIAV3DEMO</h1>
-    <div class="tagline">The Ultimate Rivals Experience</div>
-    <a href="#get-script" class="btn-launch">GET STARTED</a>
+    <h1 id="main-title">ILIAV3DEMO</h1>
+    <p id="tagline" style="letter-spacing: 5px; color: #888;">NEXT-GEN RIVALS UTILITY</p>
+    <a href="#content" class="btn-main" id="btn-get">GET SCRIPT</a>
 </div>
 
-<div class="container">
+<div class="container" id="content">
     <div class="grid">
         <div class="card">
-            <h3>Silent Aim</h3>
-            <p>Удосконалений алгоритм наведення. Кулі влучають точно в ціль без різких рухів камери. Виглядає максимально легітно для інших гравців.</p>
+            <h3 id="f1-t">Silent Aim</h3>
+            <p id="f1-d">Автоматичне доведення куль без різких рухів. Максимальна точність при повній непомітності для спостерігачів.</p>
         </div>
         <div class="card">
-            <h3>Anti-Ban Bypass</h3>
-            <p>Вбудований модуль обходу серверних перевірок Rivals. Грай спокійно — твій акаунт захищений новітніми методами ін'єкції.</p>
+            <h3 id="f2-t">ESP Vision</h3>
+            <p id="f2-d">Бач ворогів крізь будь-які перешкоди. Відображення скелетів, дистанції та ліній до противників.</p>
         </div>
         <div class="card">
-            <h3>Optimized Performance</h3>
-            <p>Мінімальний вплив на FPS. Скрипт працює плавно навіть на слабких ПК, не перевантажуючи процесор вашого пристрою.</p>
+            <h3 id="f3-t">Anti-Ban</h3>
+            <p id="f3-d">Багатошаровий обхід анти-чіта Rivals. Постійні оновлення безпеки для захисту твого акаунта.</p>
         </div>
     </div>
 
-    <div class="code-section" id="get-script">
-        <div class="code-header">
-            <span>EXECUTOR SCRIPT</span>
-            <span>STATUS: ONLINE</span>
-        </div>
-        <code>
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/iliav3beta/IliaV3key/main/script.lua"))()
-        </code>
+    <div class="code-box">
+        <code>loadstring(game:HttpGet("https://raw.githubusercontent.com/iliav3beta/IliaV3key/main/script.lua"))()</code>
     </div>
-
-    <footer>
-        DESIGNED BY ILIAV3 &copy; 2026 | ACCESS GRANTED
-    </footer>
 </div>
 
 <script>
-    // Простий ефект фону з крапками
-    const canvas = document.getElementById('dots');
+    const translations = {
+        ua: {
+            get: "ОТРИМАТИ СКРИПТ",
+            f1t: "Silent Aim",
+            f1d: "Автоматичне доведення куль без різких рухів. Максимальна точність при повній непомітності.",
+            f2t: "ESP Vision",
+            f2d: "Бач ворогів крізь будь-які перешкоди. Відображення скелетів та дистанції.",
+            f3t: "Anti-Ban",
+            f3d: "Багатошаровий обхід анти-чіта Rivals. Постійні оновлення безпеки."
+        },
+        ru: {
+            get: "ПОЛУЧИТЬ СКРИПТ",
+            f1t: "Silent Aim",
+            f1d: "Автоматическая доводка пуль без резких движений. Максимальная точность и незаметность.",
+            f2t: "ESP Vision",
+            f2d: "Видимость врагов сквозь стены. Отображение скелетов, боксов и дистанции.",
+            f3t: "Anti-Ban",
+            f3d: "Многоуровневый обход анти-чита Rivals. Защита вашего аккаунта 24/7."
+        },
+        en: {
+            get: "GET SCRIPT",
+            f1t: "Silent Aim",
+            f1d: "Advanced bullet redirection algorithm. Perfect accuracy with no snappy camera movements.",
+            f2t: "ESP Vision",
+            f2d: "See enemies through any obstacles. Shows skeletons, health bars and distance.",
+            f3t: "Anti-Ban",
+            f3d: "Encrypted bypass for Rivals anti-cheat systems. Safety is our main priority."
+        }
+    };
+
+    function setLang(lang) {
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+
+        const t = translations[lang];
+        document.getElementById('btn-get').innerText = t.get;
+        document.getElementById('f1-t').innerText = t.f1t;
+        document.getElementById('f1-d').innerText = t.f1d;
+        document.getElementById('f2-t').innerText = t.f2t;
+        document.getElementById('f2-d').innerText = t.f2d;
+        document.getElementById('f3-t').innerText = t.f3t;
+        document.getElementById('f3-d').innerText = t.f3d;
+    }
+
+    // Фонова анімація (лінії)
+    const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const particles = [];
-    for(let i = 0; i < 100; i++) {
-        particles.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            size: Math.random() * 2,
-            speed: Math.random() * 0.5
-        });
-    }
+    const lines = Array.from({length: 30}, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        len: Math.random() * 100 + 50,
+        speed: Math.random() * 2 + 1
+    }));
 
-    function animate() {
+    function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = 'rgba(0, 242, 255, 0.3)';
-        particles.forEach(p => {
-            p.y -= p.speed;
-            if(p.y < 0) p.y = canvas.height;
+        ctx.strokeStyle = 'rgba(0, 242, 255, 0.1)';
+        ctx.lineWidth = 1;
+        lines.forEach(l => {
+            l.y -= l.speed;
+            if (l.y < -l.len) l.y = canvas.height + l.len;
             ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.moveTo(l.x, l.y);
+            ctx.lineTo(l.x, l.y + l.len);
+            ctx.stroke();
         });
-        requestAnimationFrame(animate);
+        requestAnimationFrame(draw);
     }
-    animate();
+    draw();
 </script>
 
 </body>
