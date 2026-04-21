@@ -11,12 +11,10 @@
             --accent: #00f2ff;
             --accent-glow: rgba(0, 242, 255, 0.4);
             --bg: #030305;
-            --card-bg: rgba(15, 15, 20, 0.8);
+            --card-bg: rgba(15, 15, 20, 0.9);
         }
 
-        /* Плавний скрол */
         html { scroll-behavior: smooth; }
-
         * { box-sizing: border-box; transition: all 0.3s ease; -webkit-tap-highlight-color: transparent; }
 
         body {
@@ -28,7 +26,7 @@
             width: 100%;
         }
 
-        /* Анімована сітка фону */
+        /* Фон с сеткой */
         body::before {
             content: "";
             position: fixed;
@@ -38,15 +36,9 @@
                 linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
             background-size: 40px 40px;
             z-index: -1;
-            animation: moveGrid 4s linear infinite;
         }
 
-        @keyframes moveGrid {
-            0% { background-position: 0 0; }
-            100% { background-position: 40px 40px; }
-        }
-
-        /* Навігація */
+        /* Навигация */
         nav {
             position: fixed;
             top: 0; width: 100%;
@@ -56,23 +48,61 @@
             align-items: center;
             z-index: 1000;
             backdrop-filter: blur(15px);
-            background: rgba(3, 3, 5, 0.7);
+            background: rgba(3, 3, 5, 0.8);
             border-bottom: 1px solid rgba(0, 242, 255, 0.2);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
         }
 
-        .logo { 
-            font-family: 'Orbitron'; 
-            font-weight: 700; 
-            color: var(--accent); 
-            font-size: 14px; 
-            letter-spacing: 1px; 
-            text-shadow: 0 0 10px var(--accent-glow);
+        .logo { font-family: 'Orbitron'; font-weight: 700; color: var(--accent); font-size: 14px; letter-spacing: 1px; }
+
+        .nav-right { display: flex; align-items: center; gap: 15px; }
+
+        /* Бургер-иконка */
+        .burger {
+            width: 30px;
+            height: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
         }
+        .burger span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--accent);
+            border-radius: 2px;
+            box-shadow: 0 0 5px var(--accent);
+        }
+
+        /* Боковое меню */
+        .side-menu {
+            position: fixed;
+            top: 0; right: -100%;
+            width: 280px;
+            height: 100vh;
+            background: rgba(5, 5, 10, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            padding: 80px 30px;
+            border-left: 1px solid var(--accent);
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        .side-menu.active { right: 0; }
+        .side-menu a {
+            color: white;
+            text-decoration: none;
+            font-family: 'Orbitron';
+            font-size: 18px;
+            letter-spacing: 2px;
+        }
+        .side-menu a:hover { color: var(--accent); }
+        .close-menu { position: absolute; top: 25px; right: 25px; font-size: 30px; cursor: pointer; color: var(--accent); }
 
         .lang-switch { display: flex; gap: 5px; }
         .lang-btn {
-            padding: 5px 10px;
+            padding: 5px 8px;
             cursor: pointer;
             font-family: 'Orbitron';
             font-size: 10px;
@@ -81,12 +111,7 @@
             color: #888;
             border-radius: 4px;
         }
-        .lang-btn.active { 
-            background: var(--accent); 
-            color: #000; 
-            border-color: var(--accent); 
-            box-shadow: 0 0 10px var(--accent-glow);
-        }
+        .lang-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
 
         /* Hero */
         .hero {
@@ -97,7 +122,6 @@
             align-items: center;
             text-align: center;
             padding: 20px;
-            background: radial-gradient(circle, rgba(0,242,255,0.05) 0%, transparent 60%);
         }
 
         h1 {
@@ -105,17 +129,10 @@
             font-size: clamp(2rem, 12vw, 5rem);
             margin: 0;
             letter-spacing: 10px;
-            color: #fff;
             text-shadow: 0 0 20px var(--accent-glow);
-            animation: pulseText 2s infinite alternate;
         }
 
-        @keyframes pulseText {
-            from { text-shadow: 0 0 10px var(--accent-glow); }
-            to { text-shadow: 0 0 30px var(--accent), 0 0 10px #fff; }
-        }
-
-        /* Контент */
+        /* Контейнер */
         .container { width: 100%; max-width: 1000px; margin: 0 auto; padding: 60px 20px; }
 
         .grid {
@@ -129,46 +146,13 @@
             padding: 30px;
             border-left: 3px solid var(--accent);
             border-radius: 8px;
-            position: relative;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
         }
+        .card:active { transform: scale(0.98); }
 
-        .card:hover {
-            transform: translateY(-8px);
-            border-left-color: #fff;
-            box-shadow: 0 15px 30px rgba(0, 242, 255, 0.15);
-            background: rgba(25, 25, 30, 0.9);
-        }
-
-        .card h3 {
-            font-family: 'Orbitron';
-            color: var(--accent);
-            margin-top: 0;
-            font-size: 1.2rem;
-        }
-
-        .card p { font-size: 1rem; color: #bbb; line-height: 1.5; }
-
-        /* Блок коду */
-        .code-container {
-            margin-top: 40px;
-            padding: 25px;
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid rgba(0, 242, 255, 0.3);
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: inset 0 0 20px rgba(0, 242, 255, 0.05);
-            position: relative;
-        }
-
-        code {
-            color: #00ff88;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            word-break: break-all;
-            display: block;
-        }
+        .card h3 { font-family: 'Orbitron'; color: var(--accent); margin-top: 0; }
+        .card p { font-size: 1rem; color: #bbb; line-height: 1.5; pointer-events: none; }
 
         /* Кнопка */
         .btn-main {
@@ -182,105 +166,101 @@
             font-weight: bold;
             display: inline-block;
             text-transform: uppercase;
-            border-radius: 4px;
-            box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+        }
+        .btn-main:active { transform: scale(0.95); }
+
+        .code-container {
+            margin-top: 40px;
+            padding: 25px;
+            background: #000;
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            border-radius: 8px;
         }
 
-        .btn-main:hover {
-            background: var(--accent);
-            color: #000;
-            box-shadow: 0 0 25px var(--accent);
-            transform: scale(1.05);
-        }
+        code { color: #00ff88; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; word-break: break-all; display: block; }
 
-        footer { text-align: center; padding: 40px; color: #555; font-size: 10px; font-family: 'Orbitron'; }
-
-        /* Мобільна адаптація */
-        @media (max-width: 600px) {
-            nav { padding: 15px; }
-            h1 { letter-spacing: 5px; }
-            .grid { gap: 15px; }
-            .card { padding: 20px; }
-        }
+        footer { text-align: center; padding: 40px; color: #444; font-size: 10px; font-family: 'Orbitron'; }
     </style>
 </head>
 <body>
 
+<div class="side-menu" id="sideMenu">
+    <div class="close-menu" onclick="toggleMenu()">×</div>
+    <a href="#" onclick="toggleMenu()">HOME</a>
+    <a href="#scripts" onclick="toggleMenu()">FEATURES</a>
+    <a href="#scripts" onclick="toggleMenu()">GET SCRIPT</a>
+    <a href="https://discord.gg/yourlink" target="_blank">DISCORD</a>
+</div>
+
 <nav>
     <div class="logo">ILIAV3 // CORE</div>
-    <div class="lang-switch">
-        <button class="lang-btn active" onclick="setLang('ua', this)">UA</button>
-        <button class="lang-btn" onclick="setLang('ru', this)">RU</button>
-        <button class="lang-btn" onclick="setLang('en', this)">EN</button>
+    <div class="nav-right">
+        <div class="lang-switch">
+            <button class="lang-btn active" onclick="setLang('ua', this)">UA</button>
+            <button class="lang-btn" onclick="setLang('ru', this)">RU</button>
+            <button class="lang-btn" onclick="setLang('en', this)">EN</button>
+        </div>
+        <div class="burger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </div>
 </nav>
 
 <div class="hero">
     <h1>ILIAV3DEMO</h1>
-    <p id="status" style="color: var(--accent); font-family: 'JetBrains Mono'; margin: 15px 0; text-shadow: 0 0 10px var(--accent-glow);">[ STATUS: ACTIVE ]</p>
-    <a href="#scripts" class="btn-main" id="btn-get">ВСТАНОВИТИ</a>
+    <p style="color: var(--accent); font-family: 'JetBrains Mono'; margin: 15px 0;">[ STATUS: ACTIVE ]</p>
+    <a href="#scripts" class="btn-main" id="btn-get" onclick="vibrate()">ВСТАНОВИТИ</a>
 </div>
 
 <div class="container" id="scripts">
     <div class="grid">
-        <div class="card">
+        <div class="card" onclick="vibrate()">
             <h3 id="f1-t">Silent Aim</h3>
             <p id="f1-d">Інтелектуальна система наведення. Кулі влучають у ціль без різких рухів камери. Максимальна стабільність.</p>
         </div>
-        <div class="card">
+        <div class="card" onclick="vibrate()">
             <h3 id="f2-t">ESP Vision</h3>
             <p id="f2-d">Повний візуальний контроль. Відображення ворогів крізь стіни: бокси, скелети та точна дистанція.</p>
         </div>
-        <div class="card">
+        <div class="card" onclick="vibrate()">
             <h3 id="f3-t">Security Bypass</h3>
             <p id="f3-d">Обхід анти-чіта Rivals останнього покоління. Безпечне використання Demo версії.</p>
         </div>
     </div>
 
     <div class="code-container">
-        <code id="code-text">loadstring(game:HttpGet("https://raw.githubusercontent.com/iliav3beta/IliaV3key/main/script.lua"))()</code>
+        <code>loadstring(game:HttpGet("https://raw.githubusercontent.com/iliav3beta/IliaV3key/main/script.lua"))()</code>
     </div>
 </div>
 
-<footer>
-    &copy; 2026 ILIAV3 CORE // RIVALS PROJECT
-</footer>
+<footer>&copy; 2026 ILIAV3 CORE // RIVALS PROJECT</footer>
 
 <script>
-    const translations = {
-        ua: {
-            get: "ВСТАНОВИТИ",
-            f1t: "Silent Aim",
-            f1d: "Інтелектуальна система наведення. Кулі влучають у ціль без різких рухів камери. Максимальна стабільність.",
-            f2t: "ESP Vision",
-            f2d: "Повний візуальний контроль. Відображення ворогів крізь стіни: бокси, скелети та точна дистанція.",
-            f3t: "Security Bypass",
-            f3d: "Обхід анти-чіта Rivals останнього покоління. Безпечне використання Demo версії."
-        },
-        ru: {
-            get: "УСТАНОВИТЬ",
-            f1t: "Silent Aim",
-            f1d: "Интеллектуальная система наводки. Пули летят точно в цель без резких движений камеры. Полный контроль.",
-            f2t: "ESP Vision",
-            f2d: "Полный визуальный контроль. Отображение врагов сквозь стены: боксы, скелеты и точная дистанция.",
-            f3t: "Security Bypass",
-            f3d: "Обход анти-чита Rivals последнего поколения. Безопасное использование Demo версии."
-        },
-        en: {
-            get: "GET SCRIPT",
-            f1t: "Silent Aim",
-            f1d: "Advanced targeting system. Bullets hit the mark without snappy camera movements. Maximum legitimacy.",
-            f2t: "ESP Vision",
-            f2d: "Full visual awareness. See enemies through walls: 2D Boxes, Skeletons, and real-time distance.",
-            f3t: "Security Bypass",
-            f3d: "Next-gen Rivals bypass module. Use the Demo version with peace of mind."
+    // Функция вибрации
+    function vibrate() {
+        if (navigator.vibrate) {
+            navigator.vibrate(40); // 40мс легкой вибрации
         }
+    }
+
+    // Меню
+    function toggleMenu() {
+        vibrate();
+        document.getElementById('sideMenu').classList.toggle('active');
+    }
+
+    const translations = {
+        ua: { get: "ВСТАНОВИТИ", f1t: "Silent Aim", f1d: "Інтелектуальна система наведення. Кулі влучають у ціль без різких рухів камери. Максимальна стабільність.", f2t: "ESP Vision", f2d: "Повний візуальний контроль. Відображення ворогів крізь стіни: бокси, скелети та точна дистанція.", f3t: "Security Bypass", f3d: "Обхід анти-чіта Rivals останнього покоління. Безпечне використання Demo версії." },
+        ru: { get: "УСТАНОВИТЬ", f1t: "Silent Aim", f1d: "Интеллектуальная система наводки. Пули летят точно в цель без резких движений камеры. Полный контроль.", f2t: "ESP Vision", f2d: "Полный визуальный контроль. Отображение врагов сквозь стены: боксы, скелеты и точная дистанция.", f3t: "Security Bypass", f3d: "Обход анти-чита Rivals последнего поколения. Безопасное использование Demo версии." },
+        en: { get: "GET SCRIPT", f1t: "Silent Aim", f1d: "Advanced targeting system. Bullets hit the mark without snappy camera movements. Maximum legitimacy.", f2t: "ESP Vision", f2d: "Full visual awareness. See enemies through walls: 2D Boxes, Skeletons, and real-time distance.", f3t: "Security Bypass", f3d: "Next-gen Rivals bypass module. Use the Demo version with peace of mind." }
     };
 
     function setLang(lang, btn) {
+        vibrate();
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-
         const t = translations[lang];
         document.getElementById('btn-get').innerText = t.get;
         document.getElementById('f1-t').innerText = t.f1t;
