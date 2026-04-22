@@ -174,7 +174,7 @@
         .card h3 { font-family: 'Orbitron'; color: var(--accent); margin-top: 0; font-size: 1.2rem; }
         .card p { font-size: 0.95rem; color: #aaa; line-height: 1.6; pointer-events: none; }
 
-        /* Кнопка */
+        /* Кнопки */
         .btn-main {
             margin-top: 35px;
             padding: 16px 45px;
@@ -265,6 +265,10 @@
     <div class="code-container">
         <code>loadstring(game:HttpGet("https://raw.githubusercontent.com/iliav3beta/IliaV3key/main/script.lua"))()</code>
     </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="https://tubular-salmiakki-5bfa00.netlify.app/" target="_blank" class="btn-main" id="btn-key" onclick="vibrate(20)">ОТРИМАТИ КЛЮЧ</a>
+    </div>
 </div>
 
 <footer>&copy; 2026 ILIAV3 CORE // HIGH-END PERFORMANCE</footer>
@@ -282,9 +286,27 @@
     }
 
     const translations = {
-        ua: { get: "ВСТАНОВИТИ", f1t: "Silent Aim", f1d: "Інтелектуальна система наведення. Кулі влучають у ціль без різких рухів камери. Максимальна стабільність.", f2t: "ESP Vision", f2d: "Повний візуальний контроль. Відображення ворогів крізь стіни: бокси, скелети та точна дистанція.", f3t: "Security Bypass", f3d: "Обхід анти-чіта Rivals останнього покоління. Безпечне використання Demo версії." },
-        ru: { get: "УСТАНОВИТЬ", f1t: "Silent Aim", f1d: "Интеллектуальная система наводки. Пули летят точно в цель без резких движений камеры. Полный контроль.", f2t: "ESP Vision", f2d: "Полный визуальный контроль. Отображение врагов сквозь стены: боксы, скелеты и точная дистанция.", f3t: "Security Bypass", f3d: "Обход анти-чита Rivals последнего поколения. Безопасное использование Demo версии." },
-        en: { get: "GET SCRIPT", f1t: "Silent Aim", f1d: "Advanced targeting system. Bullets hit the mark without snappy camera movements. Maximum legitimacy.", f2t: "ESP Vision", f2d: "Full visual awareness. See enemies through walls: 2D Boxes, Skeletons, and real-time distance.", f3t: "Security Bypass", f3d: "Next-gen Rivals bypass module. Use the Demo version with peace of mind." }
+        ua: { 
+            get: "ВСТАНОВИТИ", 
+            key: "ОТРИМАТИ КЛЮЧ",
+            f1t: "Silent Aim", f1d: "Інтелектуальна система наведення. Кулі влучають у ціль без різких рухів камери. Максимальна стабільність.", 
+            f2t: "ESP Vision", f2d: "Повний візуальний контроль. Відображення ворогів крізь стіни: бокси, скелети та точна дистанція.", 
+            f3t: "Security Bypass", f3d: "Обхід анти-чіта Rivals останнього покоління. Безпечне використання Demo версії." 
+        },
+        ru: { 
+            get: "УСТАНОВИТЬ", 
+            key: "ПОЛУЧИТЬ КЛЮЧ",
+            f1t: "Silent Aim", f1d: "Интеллектуальная система наводки. Пули летят точно в цель без резких движений камеры. Полный контроль.", 
+            f2t: "ESP Vision", f2d: "Полный визуальный контроль. Отображение врагов сквозь стены: боксы, скелеты и точная дистанция.", 
+            f3t: "Security Bypass", f3d: "Обход анти-чита Rivals последнего поколения. Безопасное использование Demo версии." 
+        },
+        en: { 
+            get: "GET SCRIPT", 
+            key: "GET SCRIPT KEY",
+            f1t: "Silent Aim", f1d: "Advanced targeting system. Bullets hit the mark without snappy camera movements. Maximum legitimacy.", 
+            f2t: "ESP Vision", f2d: "Full visual awareness. See enemies through walls: 2D Boxes, Skeletons, and real-time distance.", 
+            f3t: "Security Bypass", f3d: "Next-gen Rivals bypass module. Use the Demo version with peace of mind." 
+        }
     };
 
     function setLang(lang, btn) {
@@ -293,6 +315,7 @@
         btn.classList.add('active');
         const t = translations[lang];
         document.getElementById('btn-get').innerText = t.get;
+        document.getElementById('btn-key').innerText = t.key;
         document.getElementById('f1-t').innerText = t.f1t;
         document.getElementById('f1-d').innerText = t.f1d;
         document.getElementById('f2-t').innerText = t.f2t;
